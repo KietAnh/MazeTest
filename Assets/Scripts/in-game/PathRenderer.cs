@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,6 +34,14 @@ public class PathRenderer : MonoBehaviour
                 offset = new Vector3(0, _pathWidth/2, 0);
             line.SetPosition(0, GameUtils.GetCenterCellPosition(path[i], width, height) - offset);
             line.SetPosition(1, GameUtils.GetCenterCellPosition(path[i + 1], width, height) + offset);
+        }
+    }
+    public void Clear()      // for editor
+    {
+        var tempList = transform.Cast<Transform>().ToList();
+        foreach(var child in tempList)
+        {
+            DestroyImmediate(child.gameObject);
         }
     }
 }

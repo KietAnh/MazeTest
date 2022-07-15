@@ -200,4 +200,35 @@ public class MazeGenerator
             }
         }
     }
+    public static void AdjustShareWalls(WallState[,] maze, int width, int height, int i, int j)
+    {
+        if (i > 0)
+        {
+            if (maze[i, j].HasFlag(WallState.UP))
+                maze[i - 1, j] |= WallState.DOWN;
+            else
+                maze[i - 1, j] &= ~WallState.DOWN;
+        }
+        if (i < height - 1)
+        {
+            if (maze[i, j].HasFlag(WallState.DOWN))
+                maze[i + 1, j] |= WallState.UP;
+            else
+                maze[i + 1, j] &= ~WallState.UP;
+        }  
+        if (j > 0)
+        {
+            if (maze[i, j].HasFlag(WallState.LEFT))
+                maze[i, j - 1] |= WallState.RIGHT;
+            else
+                maze[i, j - 1] &= ~WallState.RIGHT;
+        }
+        if (j < width - 1)
+        {
+            if (maze[i, j].HasFlag(WallState.RIGHT))
+                maze[i, j + 1] |= WallState.LEFT;
+            else
+                maze[i, j + 1] &= ~WallState.LEFT;
+        }
+    }
 }

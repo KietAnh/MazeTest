@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public static class DataCenter
 {
@@ -47,5 +49,67 @@ public class StageData
             var item = new StageItemConfig(i, isUnlocked, nStars);
             items.Add(item);
         }
+    }
+}
+
+[System.Serializable]
+public class MazeData
+{
+    public int width;
+    public int height;
+    public Position startPosition;
+    public Position endPosition;
+    public List<string> walls;
+    public MazeData(WallState[,] maze, int width, int height, Position startPosition, Position endPosition)
+    {
+        this.width = width;
+        this.height = height;
+        this.startPosition = startPosition;
+        this.endPosition = endPosition;
+        walls = new List<string>();
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                walls.Add(maze[i, j].ToString());
+            }
+        }
+    }
+    public (int, int, Position, Position, WallState[,]) Parse()
+    {
+        int w = width;
+        int h = height;
+        Position sPos = startPosition;
+        Position ePos = endPosition;
+        WallState[,] ws = new WallState[height, width];
+        
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                ws[i, j] = (WallState)Enum.Parse(typeof(WallState), walls[i * width + j]);
+            }
+        }
+
+        return (w, h, sPos, ePos, ws);
+    }
+}
+
+[System.Serializable]
+public class LevelInfo
+{
+    public string path;
+    public int minPathStep;
+    public int nSuccessPaths;
+    public int nFailPaths;
+    public float difficulty;
+
+    public LevelInfo(string path, int minPathStep, int nSuccessPaths, int nFailPaths, float difficulty)
+    {
+        this.path = path;
+        this.minPathStep = minPathStep;
+        this.nSuccessPaths = nSuccessPaths;
+        this.nFailPaths = nFailPaths;
+        this.difficulty = difficulty;
     }
 }

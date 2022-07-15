@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MazeRenderer : MonoBehaviour
@@ -22,6 +23,13 @@ public class MazeRenderer : MonoBehaviour
         Draw(mazeData);
     }
 
+    public void Init(WallState[,] mazeData, int width, int height)
+    {
+        this.mazeData = mazeData;
+        _width = width;
+        _height = height;
+    }
+
     public void RemoveWalls()
     {
         MazeGenerator.RandomRemoveWalls(mazeData, _width, _height, _sparseness);
@@ -31,17 +39,11 @@ public class MazeRenderer : MonoBehaviour
         }
         Draw(mazeData);
     }
+    
 
-    private void Draw(WallState[,] maze)                       //
+    public void Draw(WallState[,] maze)                       //
     {
         Vector3[] linePositions = new Vector3[2];
-        for (int i = 0; i < _height; i++)
-        {
-            for (int j = 0; j < _width; j++)
-            {
-                Debug.Log(maze[i, j]);
-            }
-        }
         for (int i = 0; i < _height; ++i)
         {
             for (int j = 0; j < _width; ++j)
@@ -93,6 +95,14 @@ public class MazeRenderer : MonoBehaviour
         line.startWidth = _wallThickness;
         line.endWidth = _wallThickness;
         line.SetPositions(positions);
+    }
+    public void Clear()      // for editor
+    {
+        var tempList = transform.Cast<Transform>().ToList();
+        foreach(var child in tempList)
+        {
+            DestroyImmediate(child.gameObject);
+        }
     }
 }
 
